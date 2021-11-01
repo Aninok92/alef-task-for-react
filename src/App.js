@@ -13,7 +13,7 @@ function App() {
   const [children, setChildren] = useState('')
   const [parent, setParent] = useState('')
 
-  console.log(children)
+  console.log(parent)
   return (
     <Container>
       <AppBar />
