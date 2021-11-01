@@ -1,0 +1,34 @@
+.button {
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #01a7fd;
+  border: 2px solid #01a7fd;
+  background-color: transparent;
+  border-radius: 100px;
+  align-items: center;
+  padding: 10px 20px;
+
+  &:hover {
+    color: #fff;
+    background-color: #01a7fd;
+  }
+
+  &:focus {
+    color: #fff;
+    background-color: #01a7fd;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
