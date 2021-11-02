@@ -2,14 +2,13 @@ import { useContext, useState } from 'react'
 import { nanoid } from 'nanoid'
 import FloatContainer from '../FloatContainer/FloatContainer'
 import Button from '../Button/Button'
-//import ChildrenForm from '../ChildrenForm/ChildrenForm'
 import { ContextParent } from '../../App'
 import { ContextChildren } from '../../App'
 import Section from '../Section/Section'
 import s from './PersonForm.module.scss'
 
 function PersonForm() {
-  const [inputFields, setInputFields] = useState([
+  const [inputChildrenFields, setInputChildrenFields] = useState([
     { id: nanoid(), name: '', age: '' },
   ])
   const [inputParentField, setInputParentField] = useState([
@@ -20,36 +19,21 @@ function PersonForm() {
   const [parent, setParent] = useContext(ContextParent)
   const [children, setChildren] = useContext(ContextChildren)
 
-  const addParent = () => {
-    setParent([...inputParentField, ...parent])
-  }
-
-  const addChild = () => {
-    setChildren([...inputFields, ...children])
-  }
-
-  const handleChangeChild = (id, e) => {
-    const newInputFields = inputFields.map((i) => {
+  const handleChange = (id, e, state, setState) => {
+    const newInputField = state.map((i) => {
       if (id === i.id) {
         i[e.target.name] = e.target.value
       }
       return i
     })
-    setInputFields(newInputFields)
-  }
-
-  const handleChangeParent = (id, e) => {
-    const newInputParentField = inputParentField.map((i) => {
-      if (id === i.id) {
-        i[e.target.name] = e.target.value
-      }
-      return i
-    })
-    setInputParentField(newInputParentField)
+    setState(newInputField)
   }
 
   const handleAddChild = () => {
-    setInputFields([...inputFields, { id: nanoid(), name: '', age: '' }])
+    setInputChildrenFields([
+      ...inputChildrenFields,
+      { id: nanoid(), name: '', age: '' },
+    ])
   }
 
   const handleChildrenField = () => {
@@ -57,39 +41,51 @@ function PersonForm() {
   }
 
   const handleRemoveFields = (id) => {
-    const values = [...inputFields]
+    const values = [...inputChildrenFields]
     values.splice(
       values.findIndex((value) => value.id === id),
       1
     )
-    setInputFields(values)
+    setInputChildrenFields(values)
+  }
+
+  const addParent = () => {
+    setParent([...inputParentField, ...parent])
+  }
+
+  const addChild = () => {
+    setChildren([...inputChildrenFields, ...children])
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
 
     addParent(inputParentField)
-    addChild(inputFields)
+    addChild(inputChildrenFields)
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <Section title="Персональные данные">
-        {inputParentField.map((inputField) => (
-          <div key={inputField.id}>
+        {inputParentField.map(({ id, name, age }) => (
+          <div key={id}>
             <FloatContainer
               textLabel="ФИО"
               type="text"
               name="name"
-              value={inputField.name}
-              onChange={(event) => handleChangeParent(inputField.id, event)}
+              value={name}
+              onChange={(event) =>
+                handleChange(id, event, inputParentField, setInputParentField)
+              }
             />
             <FloatContainer
               textLabel="Возраст"
               type="number"
               name="age"
-              value={inputField.age}
-              onChange={(event) => handleChangeParent(inputField.id, event)}
+              value={age}
+              onChange={(event) =>
+                handleChange(id, event, inputParentField, setInputParentField)
+              }
             />
           </div>
         ))}
@@ -105,26 +101,37 @@ function PersonForm() {
           </Button>
         )}
         {isChildrenField &&
-          inputFields.map((inputField) => (
-            <div key={inputField.id}>
+          inputChildrenFields.map(({ id, name, age }) => (
+            <div key={id}>
               <FloatContainer
                 textLabel="Имя"
                 type="text"
                 name="name"
-                value={inputField.name}
-                onChange={(event) => handleChangeChild(inputField.id, event)}
+                value={name}
+                onChange={(event) =>
+                  handleChange(
+                    id,
+                    event,
+                    inputChildrenFields,
+                    setInputChildrenFields
+                  )
+                }
               />
               <FloatContainer
                 textLabel="Возраст"
                 type="number"
                 name="age"
-                value={inputField.age}
-                onChange={(event) => handleChangeChild(inputField.id, event)}
+                value={age}
+                onChange={(event) =>
+                  handleChange(
+                    id,
+                    event,
+                    inputChildrenFields,
+                    setInputChildrenFields
+                  )
+                }
               />
-              <Button
-                type="button"
-                onClick={() => handleRemoveFields(inputField.id)}
-              >
+              <Button type="button" onClick={() => handleRemoveFields(id)}>
                 Удалить
               </Button>
             </div>

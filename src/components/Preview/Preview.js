@@ -6,10 +6,10 @@ function Preview({ parent, children }) {
     <>
       <Section title="Персональные данные">
         {parent ? (
-          parent.map((i) => {
+          parent.map(({ id, name, age }) => {
             return (
-              <p key={i.id} className={s.text}>
-                {i.name}, {i.age} лет
+              <p key={id} className={s.text}>
+                {name}, {age} лет
               </p>
             )
           })
@@ -19,10 +19,10 @@ function Preview({ parent, children }) {
       </Section>
       <Section title="Дети">
         {children ? (
-          children.map((i) => {
+          children.map(({ id, name, age }) => {
             return (
-              <p key={i.id} className={s.text}>
-                {i.name}, {i.age} лет
+              <p key={id} className={s.text}>
+                {name}, {age} лет
               </p>
             )
           })
